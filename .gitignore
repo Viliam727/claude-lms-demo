@@ -1,0 +1,20 @@
+# env
+.env.local
+.env*.local
+
+# docs
+*.md
+
+# Next.js
+.next/
+out/
+
+# dependencies
+node_modules/
+
+# build
+.vercel
+.wrangler
+
+# OS
+.DS_Store
