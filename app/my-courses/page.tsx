@@ -48,8 +48,8 @@ export default async function MyCoursesPage() {
                   )}
                 </CardHeader>
                 <CardFooter className="gap-2">
-                  {course && (
-                    <Link href={`/courses/${course.id}`}>
+                  {course && course.modules[0]?.lessons[0] && (
+                    <Link href={`/learn/${course.id}/${course.modules[0].lessons[0].id}`}>
                       <Button size="sm">Pokračovať</Button>
                     </Link>
                   )}

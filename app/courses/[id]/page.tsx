@@ -84,7 +84,7 @@ export default async function CoursePage({ params }: Props) {
         ))}
       </div>
 
-      <EnrollButton courseId={course.id} />
+      <EnrollButton courseId={course.id} firstLessonId={course.modules[0]?.lessons[0]?.id ?? ""} />
     </main>
   );
 }

@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 
 interface Props {
   courseId: string;
+  firstLessonId: string;
 }
 
-export function EnrollButton({ courseId }: Props) {
+export function EnrollButton({ courseId, firstLessonId }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +22,7 @@ export function EnrollButton({ courseId }: Props) {
         body: JSON.stringify({ courseId }),
       });
       if (!res.ok) throw new Error("Enroll failed");
-      router.push("/my-courses");
+      router.push(`/learn/${courseId}/${firstLessonId}`);
     } finally {
       setLoading(false);
     }
