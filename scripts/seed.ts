@@ -29,6 +29,7 @@ async function seed() {
   const course = await api<{ id: string }>("/api/v1/courses", "POST", {
     title: "Claude API — Buduj AI aplikácie",
     description: "Naučte sa integrovať Claude API do vlastných aplikácií. Od prvého API volania až po produkčné nasadenie — vrátane tool use, streamingu a prompt cachingu.",
+    status: "published",
   });
   console.log(`  ✓ Course: ${course.id}`);
 
