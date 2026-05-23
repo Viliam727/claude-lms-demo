@@ -6,5 +6,8 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "vars": {
+    "LMS_API_URL": "https://claude-lms.devmanag.workers.dev"
   }
 }
