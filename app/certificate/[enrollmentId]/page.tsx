@@ -1,4 +1,5 @@
-export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
 
 import Link from "next/link";
 import { getEnrollments } from "@/lib/lms-client";
