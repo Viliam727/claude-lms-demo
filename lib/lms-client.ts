@@ -1,15 +1,31 @@
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Course, Enrollment, Progress } from "./types";
 
-const BASE_URL = process.env.LMS_API_URL!;
-const API_KEY = process.env.LMS_API_KEY!;
 const DEMO_USER_ID = "demo_user_001";
 
+function getEnvVars() {
+  try {
+    const { env } = getCloudflareContext();
+    const cfEnv = env as Record<string, string>;
+    return {
+      baseUrl: cfEnv.LMS_API_URL || process.env.LMS_API_URL || "",
+      apiKey: cfEnv.LMS_API_KEY || process.env.LMS_API_KEY || "",
+    };
+  } catch {
+    return {
+      baseUrl: process.env.LMS_API_URL || "",
+      apiKey: process.env.LMS_API_KEY || "",
+    };
+  }
+}
+
 async function lmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const { baseUrl, apiKey } = getEnvVars();
+  const res = await fetch(`${baseUrl}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       ...init?.headers,
     },
   });
