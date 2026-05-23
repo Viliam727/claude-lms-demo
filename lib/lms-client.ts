@@ -63,8 +63,9 @@ function parseCourse(course: Course): Course {
 }
 
 export async function getCourses(): Promise<Course[]> {
-  const courses = await lmsFetch<Course[]>("/api/v1/courses");
-  return courses.map(parseCourse);
+  const list = await lmsFetch<Course[]>("/api/v1/courses");
+  const full = await Promise.all(list.map((c) => getCourse(c.id)));
+  return full;
 }
 
 export async function getCourse(id: string): Promise<Course> {
