@@ -3,6 +3,9 @@ import type { Course, Enrollment, Progress } from "./types";
 
 const DEMO_USER_ID = "demo_user_001";
 
+// Hardcoded fallback — URL je verejná, je v wrangler.jsonc tiež
+const FALLBACK_LMS_URL = "https://claude-lms.devmanag.workers.dev";
+
 function getEnvVar(key: string): string {
   try {
     const { env } = getCloudflareContext();
@@ -13,9 +16,18 @@ function getEnvVar(key: string): string {
 }
 
 async function lmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const baseUrl = getEnvVar("LMS_API_URL");
+  const baseUrl = getEnvVar("LMS_API_URL") || FALLBACK_LMS_URL;
   const apiKey = getEnvVar("LMS_API_KEY");
-  const res = await fetch(`${baseUrl}${path}`, {
+
+  if (!apiKey) {
+    console.error("[LMS] LMS_API_KEY is missing!");
+    throw new Error("LMS_API_KEY not configured");
+  }
+
+  const fullUrl = `${baseUrl}${path}`;
+  console.log(`[LMS] ${init?.method ?? "GET"} ${fullUrl}`);
+
+  const res = await fetch(fullUrl, {
     ...init,
     headers: {
       "Content-Type": "application/json",
@@ -25,6 +37,8 @@ async function lmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    console.error(`[LMS] Error ${res.status} on ${fullUrl}: ${body}`);
     throw new Error(`LMS API error: ${res.status} ${res.statusText}`);
   }
 
