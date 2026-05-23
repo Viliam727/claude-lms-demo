@@ -41,7 +41,7 @@
     "wrangler": "^4.94.0"
   },
   "engines": {
-    "node": ">=20 <21"
+    "node": ">=22"
   },
   "pnpm": {
     "allowedBuildScripts": [
