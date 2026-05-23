@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { VideoPlayer } from "./video-player";
 import { TextLesson } from "./text-lesson";
 import { QuizLesson } from "./quiz-lesson";
+import { getLessonTypeIcon } from "@/lib/course-utils";
 
 interface Props {
   params: Promise<{ courseId: string; lessonId: string }>;
@@ -64,7 +65,9 @@ export default async function LessonPage({ params }: Props) {
                           : "text-gray-600 hover:bg-gray-100"
                       }`}
                     >
-                      <span>{completedIds.has(l.id) ? "✓" : "○"}</span>
+                      <span className="shrink-0 text-xs w-4 text-center">
+                        {completedIds.has(l.id) ? "✓" : getLessonTypeIcon(l.type)}
+                      </span>
                       <span className="truncate">{l.title}</span>
                     </Link>
                   </li>
