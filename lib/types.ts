@@ -60,6 +60,7 @@ export interface Enrollment {
 
 export interface Progress {
   lesson_id: string;
+  enrollment_id?: string;
   completed: boolean;
   score?: number;
   completed_at?: string;
