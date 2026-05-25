@@ -37,13 +37,13 @@ async function seed() {
 
   const mod1 = await api<{ id: string }>(`/api/v1/courses/${course.id}/modules`, "POST", {
     title: "Prvé kroky s Claude API",
-    order: 1,
+    position: 1,
   });
 
   await api(`/api/v1/modules/${mod1.id}/lessons`, "POST", {
     title: "Čo je Claude API a prečo ho používať",
     type: "text",
-    order: 1,
+    position: 1,
     content: {
       markdown: `# Čo je Claude API
 
@@ -81,7 +81,7 @@ Po dokončení kurzu budeš schopný/á:
   await api(`/api/v1/modules/${mod1.id}/lessons`, "POST", {
     title: "Nastavenie prostredia a API kľúč",
     type: "text",
-    order: 2,
+    position: 2,
     content: {
       markdown: `# Nastavenie prostredia
 
@@ -140,7 +140,7 @@ Nový účet dostane kredit zadarmo na testovanie. Spotreba sa fakturuje podľa 
   await api(`/api/v1/modules/${mod1.id}/lessons`, "POST", {
     title: "Prvý API call — Hello Claude",
     type: "text",
-    order: 3,
+    position: 3,
     content: {
       markdown: `# Prvý API call
 
@@ -225,7 +225,7 @@ Obsah je pole — môže obsahovať text aj tool_use bloky. Vždy skontroluj \`c
   await api(`/api/v1/modules/${mod1.id}/lessons`, "POST", {
     title: "Kvíz: Základy API",
     type: "quiz",
-    order: 4,
+    position: 4,
     content: {
       pass_score: 60,
       questions: [
@@ -268,13 +268,13 @@ Obsah je pole — môže obsahovať text aj tool_use bloky. Vždy skontroluj \`c
 
   const mod2 = await api<{ id: string }>(`/api/v1/courses/${course.id}/modules`, "POST", {
     title: "Messages API do hĺbky",
-    order: 2,
+    position: 2,
   });
 
   await api(`/api/v1/modules/${mod2.id}/lessons`, "POST", {
     title: "Štruktúra správy — role a content",
     type: "text",
-    order: 1,
+    position: 1,
     content: {
       markdown: `# Štruktúra správy
 
@@ -339,7 +339,7 @@ messages: [
   await api(`/api/v1/modules/${mod2.id}/lessons`, "POST", {
     title: "System prompty — ako dať AI osobnosť a pokyny",
     type: "text",
-    order: 2,
+    position: 2,
     content: {
       markdown: `# System prompty
 
@@ -397,7 +397,7 @@ Máš prístup k nasledovnému katalógu produktov:
   await api(`/api/v1/modules/${mod2.id}/lessons`, "POST", {
     title: "Multi-turn konverzácie",
     type: "text",
-    order: 3,
+    position: 3,
     content: {
       markdown: `# Multi-turn konverzácie
 
@@ -472,7 +472,7 @@ if (estimatedTokens > 150_000) {
   await api(`/api/v1/modules/${mod2.id}/lessons`, "POST", {
     title: "Kvíz: Messages API",
     type: "quiz",
-    order: 4,
+    position: 4,
     content: {
       pass_score: 60,
       questions: [
@@ -515,13 +515,13 @@ if (estimatedTokens > 150_000) {
 
   const mod3 = await api<{ id: string }>(`/api/v1/courses/${course.id}/modules`, "POST", {
     title: "Modely a parametry",
-    order: 3,
+    position: 3,
   });
 
   await api(`/api/v1/modules/${mod3.id}/lessons`, "POST", {
     title: "Claude Opus, Sonnet, Haiku — kedy čo použiť",
     type: "text",
-    order: 1,
+    position: 1,
     content: {
       markdown: `# Rodina modelov Claude
 
@@ -581,7 +581,7 @@ const MODEL = process.env.CLAUDE_MODEL ?? "claude-sonnet-4-5";
   await api(`/api/v1/modules/${mod3.id}/lessons`, "POST", {
     title: "Temperature, max_tokens a ďalšie parametre",
     type: "text",
-    order: 2,
+    position: 2,
     content: {
       markdown: `# Parametre volania
 
@@ -644,7 +644,7 @@ const result = await client.messages.create({
   await api(`/api/v1/modules/${mod3.id}/lessons`, "POST", {
     title: "Streaming odpovedí v praxi",
     type: "text",
-    order: 3,
+    position: 3,
     content: {
       markdown: `# Streaming odpovedí
 
@@ -751,7 +751,7 @@ async function sendMessage(text: string) {
   await api(`/api/v1/modules/${mod3.id}/lessons`, "POST", {
     title: "Kvíz: Modely a parametry",
     type: "quiz",
-    order: 4,
+    position: 4,
     content: {
       pass_score: 60,
       questions: [
@@ -794,13 +794,13 @@ async function sendMessage(text: string) {
 
   const mod4 = await api<{ id: string }>(`/api/v1/courses/${course.id}/modules`, "POST", {
     title: "Produkčné nasadenie",
-    order: 4,
+    position: 4,
   });
 
   await api(`/api/v1/modules/${mod4.id}/lessons`, "POST", {
     title: "Tool use — Claude volá tvoje funkcie",
     type: "text",
-    order: 1,
+    position: 1,
     content: {
       markdown: `# Tool Use
 
@@ -897,7 +897,7 @@ if (response.stop_reason === "tool_use") {
   await api(`/api/v1/modules/${mod4.id}/lessons`, "POST", {
     title: "Prompt caching — rýchlosť a úspora nákladov",
     type: "text",
-    order: 2,
+    position: 2,
     content: {
       markdown: `# Prompt Caching
 
@@ -963,7 +963,7 @@ Ak máš 5000 tokenov v system prompte a robíš 1000 volaní denne:
   await api(`/api/v1/modules/${mod4.id}/lessons`, "POST", {
     title: "Error handling, rate limits a best practices",
     type: "text",
-    order: 3,
+    position: 3,
     content: {
       markdown: `# Error Handling a Rate Limits
 
@@ -1038,7 +1038,7 @@ const client = new Anthropic({ apiKey: "sk-ant-api03-hardcoded" });
   await api(`/api/v1/modules/${mod4.id}/lessons`, "POST", {
     title: "Záverečný kvíz",
     type: "quiz",
-    order: 4,
+    position: 4,
     content: {
       pass_score: 70,
       questions: [
