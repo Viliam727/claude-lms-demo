@@ -3,6 +3,9 @@
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
   "main": ".open-next/worker.js",
+  "vars": {
+    "LMS_TENANT_KEY_PREFIX": "7a4e5216"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"

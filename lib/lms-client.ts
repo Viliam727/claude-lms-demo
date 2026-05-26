@@ -1,24 +1,14 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { Course, Enrollment, Lesson, Module, Progress } from "./types";
+import {
+  getLmsApiKey,
+  getLmsServiceBinding,
+} from "./lms-env";
 
 const DEMO_USER_ID = "demo_user_001";
 
 async function lmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const { env } = getCloudflareContext();
-  const envRecord = env as Record<string, unknown>;
-
-  const apiKey = (envRecord.LMS_API_KEY as string) ?? process.env.LMS_API_KEY ?? "";
-  const lmsBinding = envRecord.LMS_API as { fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response> } | undefined;
-
-  if (!apiKey) {
-    console.error("[LMS] LMS_API_KEY is missing!");
-    throw new Error("LMS_API_KEY not configured");
-  }
-
-  if (!lmsBinding) {
-    console.error("[LMS] LMS_API service binding is missing!");
-    throw new Error("LMS_API service binding not configured");
-  }
+  const apiKey = getLmsApiKey();
+  const lmsBinding = getLmsServiceBinding();
 
   console.log(`[LMS] ${init?.method ?? "GET"} ${path} (via service binding)`);
 
@@ -66,6 +56,10 @@ function parseCourse(course: Course): Course {
 
 export async function getCoursesList(): Promise<Course[]> {
   return lmsFetch<Course[]>("/api/v1/courses");
+}
+
+export function getTenant(): Promise<{ id: string; name: string }> {
+  return lmsFetch("/api/v1/tenant");
 }
 
 export async function getCourses(): Promise<Course[]> {

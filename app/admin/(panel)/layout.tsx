@@ -1,4 +1,7 @@
 import { AdminNav } from "@/components/admin/admin-nav";
+import { TenantNotice } from "@/components/admin/tenant-notice";
+
+export const dynamic = "force-dynamic";
 
 export default function AdminPanelLayout({
   children,
@@ -8,7 +11,10 @@ export default function AdminPanelLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNav />
-      <div className="max-w-5xl mx-auto px-6 py-8">{children}</div>
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <TenantNotice />
+        {children}
+      </div>
     </div>
   );
 }
