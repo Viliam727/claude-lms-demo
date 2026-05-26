@@ -10,10 +10,6 @@ export default async function HomePage() {
   const courses = await getCourses();
   const totalLessons = courses.reduce((sum, c) => sum + countLessons(c), 0);
 
-  const uniqueCourses = courses.filter(
-    (course, index, all) => all.findIndex((c) => c.title === course.title) === index
-  );
-
   return (
     <>
       <SiteHeader active="courses" />
@@ -38,7 +34,7 @@ export default async function HomePage() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <div className="rounded-xl border bg-card/80 px-4 py-3 backdrop-blur-sm">
-              <p className="text-2xl font-bold tabular-nums">{uniqueCourses.length}</p>
+              <p className="text-2xl font-bold tabular-nums">{courses.length}</p>
               <p className="text-xs text-muted-foreground">kurzov v katalógu</p>
             </div>
             <div className="rounded-xl border bg-card/80 px-4 py-3 backdrop-blur-sm">
@@ -58,13 +54,13 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {uniqueCourses.length === 0 ? (
+          {courses.length === 0 ? (
             <div className="rounded-2xl border border-dashed bg-card/50 py-20 text-center">
               <p className="text-muted-foreground">Zatiaľ žiadne kurzy v katalógu.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
-              {uniqueCourses.map((course) => (
+              {courses.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}
             </div>
