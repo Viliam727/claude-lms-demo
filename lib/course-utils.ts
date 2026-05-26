@@ -1,5 +1,18 @@
 import type { Course } from "./types";
 
+const COURSE_GRADIENTS = [
+  "from-violet-600 via-indigo-600 to-blue-700",
+  "from-blue-600 via-cyan-600 to-teal-600",
+  "from-emerald-600 via-green-600 to-teal-700",
+  "from-orange-500 via-rose-500 to-pink-600",
+  "from-fuchsia-600 via-purple-600 to-indigo-700",
+] as const;
+
+export function getCourseGradient(courseId: string): string {
+  const hash = [...courseId].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return COURSE_GRADIENTS[hash % COURSE_GRADIENTS.length];
+}
+
 export function countLessons(course: Course): number {
   return course.modules.reduce((sum, m) => sum + m.lessons.length, 0);
 }
@@ -46,4 +59,16 @@ export function getLessonTypeIcon(type: string): string {
     file: "📎",
   };
   return icons[type] ?? "•";
+}
+
+export type LessonType = "video" | "text" | "quiz" | "file";
+
+export function getLessonTypeLabel(type: string): string {
+  const labels: Record<string, string> = {
+    video: "Video",
+    text: "Text",
+    quiz: "Kvíz",
+    file: "Súbor",
+  };
+  return labels[type] ?? type;
 }

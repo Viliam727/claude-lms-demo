@@ -33,10 +33,10 @@ export async function TenantNotice() {
 
   return (
     <div
-      className={`mb-6 rounded-lg border px-4 py-3 text-sm ${
+      className={`mb-6 rounded-xl border px-4 py-3 text-sm ${
         wrongTenant || tenantId === "tenant_01"
-          ? "border-amber-300 bg-amber-50 text-amber-950"
-          : "border-gray-200 bg-white text-gray-600"
+          ? "border-amber-300/80 bg-amber-50 text-amber-950"
+          : "border-border bg-muted/40 text-muted-foreground"
       }`}
     >
       {loadError ? (

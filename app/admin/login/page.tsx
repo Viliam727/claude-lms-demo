@@ -1,22 +1,28 @@
-import { AdminLoginForm } from "@/components/admin/login-form";
 import Link from "next/link";
+import { Layers } from "lucide-react";
+import { AdminLoginForm } from "@/components/admin/login-form";
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <p className="text-xs uppercase tracking-wide text-gray-400">LMS Demo</p>
-          <h1 className="text-2xl font-semibold mt-1">Course Admin</h1>
-          <p className="text-sm text-gray-500 mt-2">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md shadow-primary/20">
+            <Layers className="size-5" />
+          </div>
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            LMS Demo
+          </p>
+          <h1 className="mt-2 text-2xl font-bold tracking-tight">Course Admin</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
             Referenčný admin pre integrátorov
           </p>
         </div>
-        <div className="bg-white border rounded-xl p-6 shadow-sm">
+        <div className="rounded-2xl border bg-card p-6 shadow-sm">
           <AdminLoginForm />
         </div>
-        <p className="text-center text-sm text-gray-400 mt-4">
-          <Link href="/" className="hover:text-gray-600">
+        <p className="mt-4 text-center text-sm text-muted-foreground">
+          <Link href="/" className="hover:text-foreground">
             ← Späť na demo
           </Link>
         </p>

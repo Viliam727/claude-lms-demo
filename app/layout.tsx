@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const sans = Plus_Jakarta_Sans({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
-  title: "LMS Demo",
-  description: "Headless LMS backend demo",
+  title: "LMS Demo — Headless learning platform",
+  description: "Referenčná implementácia headless LMS pre integrátorov",
 };
 
 export default function RootLayout({
@@ -16,8 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sk" className="h-full">
-      <body className={`${inter.className} min-h-full bg-white text-gray-900 antialiased`}>
-        {children}
+      <body
+        className={`${sans.variable} min-h-full bg-background font-sans text-foreground antialiased`}
+      >
+        <div className="site-bg min-h-full">{children}</div>
       </body>
     </html>
   );

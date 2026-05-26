@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import type { Lesson, VideoContent } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -30,20 +31,30 @@ export function VideoPlayer({ lesson, content, enrollmentId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="aspect-video bg-black rounded-lg overflow-hidden">
+      <div className="overflow-hidden rounded-xl bg-slate-950 shadow-inner ring-1 ring-border/50">
         <video
           src={content.url}
           controls
-          className="w-full h-full"
+          className="aspect-video w-full"
           onEnded={markComplete}
         />
       </div>
       {!done ? (
-        <Button onClick={markComplete} disabled={marking} variant="outline">
-          {marking ? "Ukladám..." : "Označiť ako dokončené"}
+        <Button onClick={markComplete} disabled={marking} variant="outline" className="gap-2">
+          {marking ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Ukladám...
+            </>
+          ) : (
+            "Označiť ako dokončené"
+          )}
         </Button>
       ) : (
-        <p className="text-green-600 text-sm font-medium">✓ Lekcia dokončená</p>
+        <p className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600">
+          <CheckCircle2 className="size-4" />
+          Lekcia dokončená
+        </p>
       )}
     </div>
   );

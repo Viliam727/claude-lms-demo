@@ -1,77 +1,76 @@
 export const dynamic = "force-dynamic";
 
-import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { getCourses } from "@/lib/lms-client";
-import {
-  countLessons,
-  estimateDurationMinutes,
-  formatDuration,
-  getCourseLevel,
-} from "@/lib/course-utils";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { countLessons } from "@/lib/course-utils";
+import { CourseCard } from "@/components/course-card";
+import { SiteHeader } from "@/components/site-header";
 
 export default async function HomePage() {
   const courses = await getCourses();
+  const totalLessons = courses.reduce((sum, c) => sum + countLessons(c), 0);
+
+  const uniqueCourses = courses.filter(
+    (course, index, all) => all.findIndex((c) => c.title === course.title) === index
+  );
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-12">
-      <div className="flex items-center justify-between mb-10">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Kurzy</h1>
-          <p className="text-gray-500 mt-1">Vyberte si kurz a začnite sa učiť</p>
-        </div>
-        <div className="flex items-center gap-2">
-        <Link href="/my-courses">
-          <Button variant="outline">Moje kurzy</Button>
-        </Link>
-        <Link href="/admin">
-          <Button variant="ghost" size="sm" className="text-gray-400">
-            Admin
-          </Button>
-        </Link>
-        </div>
-      </div>
+    <>
+      <SiteHeader active="courses" />
 
-      {courses.length === 0 ? (
-        <p className="text-gray-400 text-center py-16">Žiadne kurzy.</p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {courses.map((course) => {
-            const lessonCount = countLessons(course);
-            const duration = formatDuration(estimateDurationMinutes(course));
-            const level = getCourseLevel(course);
-            return (
-              <Card key={course.id} className="flex flex-col">
-                <CardHeader>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="secondary" className="text-xs font-normal">
-                      {level}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-lg">{course.title}</CardTitle>
-                  <CardDescription>{course.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="flex items-center gap-3 text-sm text-gray-500">
-                    <span>{course.modules.length} {course.modules.length === 1 ? "modul" : "moduly"}</span>
-                    <span>·</span>
-                    <span>{lessonCount} {lessonCount === 1 ? "lekcia" : "lekcií"}</span>
-                    <span>·</span>
-                    <span>{duration}</span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Link href={`/courses/${course.id}`} className="w-full">
-                    <Button className="w-full">Zobraziť kurz</Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            );
-          })}
-        </div>
-      )}
-    </main>
+      <main className="mx-auto max-w-6xl px-6 pb-16 pt-10">
+        <section className="mb-12">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+            <Sparkles className="size-3.5" />
+            Referenčná implementácia pre integrátorov
+          </div>
+          <h1 className="mt-5 max-w-2xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            Učte sa cez modernú{" "}
+            <span className="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">
+              headless LMS
+            </span>{" "}
+            platformu
+          </h1>
+          <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Demo ukazuje študentský flow — katalóg kurzov, enrollment, prehrávač lekcií,
+            progress a certifikáty. Všetko napojené na LMS API.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <div className="rounded-xl border bg-card/80 px-4 py-3 backdrop-blur-sm">
+              <p className="text-2xl font-bold tabular-nums">{uniqueCourses.length}</p>
+              <p className="text-xs text-muted-foreground">kurzov v katalógu</p>
+            </div>
+            <div className="rounded-xl border bg-card/80 px-4 py-3 backdrop-blur-sm">
+              <p className="text-2xl font-bold tabular-nums">{totalLessons}</p>
+              <p className="text-xs text-muted-foreground">lekcií celkom</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight">Dostupné kurzy</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Vyberte si kurz a začnite sa učiť
+              </p>
+            </div>
+          </div>
+
+          {uniqueCourses.length === 0 ? (
+            <div className="rounded-2xl border border-dashed bg-card/50 py-20 text-center">
+              <p className="text-muted-foreground">Zatiaľ žiadne kurzy v katalógu.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
+              {uniqueCourses.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+    </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import type { Lesson, TextContent } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -29,17 +30,27 @@ export function TextLesson({ lesson, content, enrollmentId }: Props) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div
-        className="prose prose-gray max-w-none"
+        className="prose-lesson"
         dangerouslySetInnerHTML={{ __html: markdownToHtml(content.markdown) }}
       />
       {!done ? (
-        <Button onClick={markComplete} disabled={marking}>
-          {marking ? "Ukladám..." : "Označiť ako prečítané"}
+        <Button onClick={markComplete} disabled={marking} className="gap-2">
+          {marking ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Ukladám...
+            </>
+          ) : (
+            "Označiť ako prečítané"
+          )}
         </Button>
       ) : (
-        <p className="text-green-600 text-sm font-medium">✓ Lekcia dokončená</p>
+        <p className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600">
+          <CheckCircle2 className="size-4" />
+          Lekcia dokončená
+        </p>
       )}
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Props {
@@ -29,8 +30,23 @@ export function EnrollButton({ courseId, firstLessonId }: Props) {
   }
 
   return (
-    <Button onClick={handleEnroll} disabled={loading} className="w-full" size="lg">
-      {loading ? "Spracovávam..." : "Simulovať platbu a zapísať sa"}
+    <Button
+      onClick={handleEnroll}
+      disabled={loading}
+      className="h-11 w-full gap-2 text-base shadow-md shadow-primary/20"
+      size="lg"
+    >
+      {loading ? (
+        <>
+          <Loader2 className="size-4 animate-spin" />
+          Spracovávam...
+        </>
+      ) : (
+        <>
+          <Sparkles className="size-4" />
+          Simulovať platbu a zapísať sa
+        </>
+      )}
     </Button>
   );
 }

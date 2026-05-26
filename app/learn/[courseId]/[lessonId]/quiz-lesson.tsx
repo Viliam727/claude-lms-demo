@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import type { Lesson, QuizContent } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -47,8 +48,11 @@ export function QuizLesson({ lesson, content, enrollmentId }: Props) {
     <div className="space-y-8">
       {content.questions.map((q, qi) => (
         <div key={qi} className="space-y-3">
-          <p className="font-medium text-gray-900">
-            {qi + 1}. {q.text}
+          <p className="font-semibold text-foreground">
+            <span className="mr-2 inline-flex size-6 items-center justify-center rounded-md bg-primary/10 text-xs font-bold text-primary">
+              {qi + 1}
+            </span>
+            {q.text}
           </p>
           <ul className="space-y-2">
             {q.options.map((opt, oi) => {
@@ -57,19 +61,20 @@ export function QuizLesson({ lesson, content, enrollmentId }: Props) {
               return (
                 <li key={oi}>
                   <button
+                    type="button"
                     disabled={submitted}
                     onClick={() => setAnswers((a) => ({ ...a, [qi]: oi }))}
                     className={cn(
-                      "w-full text-left px-4 py-2.5 rounded-lg border text-sm transition-colors",
+                      "w-full rounded-xl border px-4 py-3 text-left text-sm transition-all",
                       submitted
                         ? isCorrect
-                          ? "border-green-500 bg-green-50 text-green-800"
+                          ? "border-emerald-500/50 bg-emerald-50 text-emerald-900"
                           : selected
-                          ? "border-red-400 bg-red-50 text-red-800"
-                          : "border-gray-200 text-gray-400"
+                            ? "border-red-400/50 bg-red-50 text-red-900"
+                            : "border-border text-muted-foreground"
                         : selected
-                        ? "border-blue-500 bg-blue-50 text-blue-800"
-                        : "border-gray-200 hover:border-gray-400 text-gray-700"
+                          ? "border-primary bg-primary/5 text-foreground ring-2 ring-primary/20"
+                          : "border-border hover:border-primary/30 hover:bg-muted/50"
                     )}
                   >
                     {opt.text}
@@ -86,15 +91,38 @@ export function QuizLesson({ lesson, content, enrollmentId }: Props) {
           {submitting ? "Vyhodnocujem..." : "Odovzdať kvíz"}
         </Button>
       ) : (
-        <div className={cn("rounded-lg p-4 text-sm font-medium", passed ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800")}>
-          {passed
-            ? `✓ Úspešne! Skóre: ${score}% (potrebné: ${content.pass_score}%)`
-            : `✗ Neúspešné. Skóre: ${score}% (potrebné: ${content.pass_score}%)`}
-          {!passed && (
-            <button onClick={reset} className="ml-4 underline text-xs">
-              Skúsiť znova
-            </button>
+        <div
+          className={cn(
+            "flex items-start gap-3 rounded-xl border p-4 text-sm",
+            passed
+              ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+              : "border-red-200 bg-red-50 text-red-900"
           )}
+        >
+          {passed ? (
+            <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
+          ) : (
+            <XCircle className="mt-0.5 size-5 shrink-0" />
+          )}
+          <div>
+            <p className="font-medium">
+              {passed
+                ? `Úspešne! Skóre: ${score}%`
+                : `Neúspešné. Skóre: ${score}%`}
+            </p>
+            <p className="mt-0.5 text-xs opacity-80">
+              Potrebné minimum: {content.pass_score}%
+            </p>
+            {!passed && (
+              <button
+                type="button"
+                onClick={reset}
+                className="mt-2 text-xs font-medium underline underline-offset-2"
+              >
+                Skúsiť znova
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>
