@@ -22,9 +22,16 @@ export default async function HomePage() {
           <h1 className="text-3xl font-semibold text-gray-900">Kurzy</h1>
           <p className="text-gray-500 mt-1">Vyberte si kurz a začnite sa učiť</p>
         </div>
+        <div className="flex items-center gap-2">
         <Link href="/my-courses">
           <Button variant="outline">Moje kurzy</Button>
         </Link>
+        <Link href="/admin">
+          <Button variant="ghost" size="sm" className="text-gray-400">
+            Admin
+          </Button>
+        </Link>
+        </div>
       </div>
 
       {courses.length === 0 ? (

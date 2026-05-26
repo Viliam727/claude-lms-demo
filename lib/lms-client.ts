@@ -1,5 +1,5 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import type { Course, Enrollment, Progress } from "./types";
+import type { Course, Enrollment, Lesson, Module, Progress } from "./types";
 
 const DEMO_USER_ID = "demo_user_001";
 
@@ -37,6 +37,8 @@ async function lmsFetch<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(`LMS API error: ${res.status} ${res.statusText}`);
   }
 
+  if (res.status === 204) return undefined as T;
+
   const json = await res.json();
   return ("data" in json ? json.data : json) as T;
 }
@@ -62,10 +64,78 @@ function parseCourse(course: Course): Course {
   };
 }
 
+export async function getCoursesList(): Promise<Course[]> {
+  return lmsFetch<Course[]>("/api/v1/courses");
+}
+
 export async function getCourses(): Promise<Course[]> {
-  const list = await lmsFetch<Course[]>("/api/v1/courses");
+  const list = await getCoursesList();
   const full = await Promise.all(list.map((c) => getCourse(c.id)));
   return full;
+}
+
+export function createCourse(body: {
+  title: string;
+  description?: string;
+  status?: string;
+}): Promise<Course> {
+  return lmsFetch("/api/v1/courses", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function updateCourse(
+  id: string,
+  body: { title?: string; description?: string; status?: string }
+): Promise<Course> {
+  return lmsFetch(`/api/v1/courses/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+}
+
+export function deleteCourse(id: string): Promise<void> {
+  return lmsFetch(`/api/v1/courses/${id}`, { method: "DELETE" });
+}
+
+export function createModule(
+  courseId: string,
+  body: { title: string; position?: number }
+): Promise<Module> {
+  return lmsFetch(`/api/v1/courses/${courseId}/modules`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function createLesson(
+  moduleId: string,
+  body: {
+    title: string;
+    type: string;
+    content?: Record<string, unknown>;
+    position?: number;
+  }
+): Promise<Lesson> {
+  return lmsFetch(`/api/v1/modules/${moduleId}/lessons`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+export function updateLesson(
+  id: string,
+  body: {
+    title?: string;
+    position?: number;
+    content?: Record<string, unknown>;
+  }
+): Promise<Lesson> {
+  return lmsFetch(`/api/v1/lessons/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
 }
 
 export async function getCourse(id: string): Promise<Course> {
